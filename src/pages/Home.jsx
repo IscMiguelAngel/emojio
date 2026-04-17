@@ -43,7 +43,7 @@ function EmojiItem({ item, darkMode, t, copiedEmoji, onCopy }) {
   )
 }
 
-function CategorySection({ category, darkMode, t, expandedCategories, toggleCategory, debouncedQuery, copiedEmoji, onCopy }) {
+function CategorySection({ category, darkMode, t, copiedEmoji, onCopy }) {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef(null)
 
@@ -65,32 +65,16 @@ function CategorySection({ category, darkMode, t, expandedCategories, toggleCate
     return () => observer.disconnect()
   }, [])
 
-  const displayEmojis = expandedCategories[category.id] || debouncedQuery 
-    ? category.emojis 
-    : category.emojis.slice(0, 6)
+  const displayEmojis = category.emojis
 
   return (
     <section ref={sectionRef} key={category.id} className="mb-10" aria-labelledby={`category-${category.id}`}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3">
           <span className="text-3xl" aria-hidden="true">{category.icon}</span>
           <h2 id={`category-${category.id}`} className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
             {category.name}
           </h2>
         </div>
-        <button
-          onClick={() => toggleCategory(category.id)}
-          aria-expanded={expandedCategories[category.id]}
-          aria-controls={`category-${category.id}-emojis`}
-          className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${
-            darkMode 
-              ? 'text-blue-400 hover:text-blue-300 hover:bg-gray-800' 
-              : 'text-blue-600 hover:text-blue-700 hover:bg-gray-200'
-          }`}
-        >
-          {expandedCategories[category.id] ? t.showLess : t.viewAll}
-        </button>
-      </div>
 
       <div 
         id={`category-${category.id}-emojis`}
@@ -116,7 +100,6 @@ export default function Home({ t, darkMode, searchQuery }) {
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const [emojis, setEmojis] = useState([])
   const [loading, setLoading] = useState(true)
-  const [expandedCategories, setExpandedCategories] = useState({})
   const [copiedEmoji, setCopiedEmoji] = useState(null)
   const mainRef = useRef(null)
 
@@ -201,13 +184,6 @@ export default function Home({ t, darkMode, searchQuery }) {
     }
   }, [])
 
-  const toggleCategory = useCallback((categoryId) => {
-    setExpandedCategories(prev => ({
-      ...prev,
-      [categoryId]: !prev[categoryId]
-    }))
-  }, [])
-
   return (
     <main ref={mainRef} className="max-w-7xl mx-auto px-4 py-8">
       {loading ? (
@@ -232,8 +208,6 @@ export default function Home({ t, darkMode, searchQuery }) {
               category={category}
               darkMode={darkMode}
               t={t}
-              expandedCategories={expandedCategories}
-              toggleCategory={toggleCategory}
               debouncedQuery={debouncedQuery}
               copiedEmoji={copiedEmoji}
               onCopy={handleCopy}
