@@ -6,6 +6,7 @@ Emojio es una aplicación web para buscar, copiar y pegar emojis en tus redes so
 
 - Búsqueda de emojis por palabra clave
 - Explora emojis por categorías
+- Indicador activo en el sidebar que resalta la categoría visible al hacer scroll
 - Un clic para copiar al portapapeles
 - Tema oscuro/claro
 - Soporte multilingüe (español, inglés)
